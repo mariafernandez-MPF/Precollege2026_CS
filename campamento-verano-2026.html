@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campamento de Computación — Sagrado 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8EC;
+    --navy:#161A2E;
+    --navy-soft:#1D2B53;
+    --coral:#FF6F59;
+    --teal:#1B998B;
+    --sun:#FFC93C;
+    --grass:#52B788;
+    --blue:#3A86FF;
+    --purple:#7C5CFF;
+    --paper:#FFFDF7;
+    --shadow: 0 8px 24px rgba(22,26,46,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Nunito', sans-serif;
+    background:var(--cream);
+    color:var(--navy);
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{font-family:'Fredoka', sans-serif; font-weight:600;}
+  .mono{font-family:'Space Mono', monospace;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 6vw;
+    background:rgba(255,248,236,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:3px dashed var(--navy);
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fredoka'; font-weight:700; font-size:1.1rem; color:var(--navy);}
+  .brand-badge{
+    width:34px; height:34px; border-radius:9px;
+    background:var(--navy); display:flex; align-items:center; justify-content:center;
+    color:var(--sun); font-size:1rem; font-family:'Space Mono'; font-weight:700;
+  }
+  nav ul{list-style:none; display:flex; gap:22px;}
+  nav a{color:var(--navy); text-decoration:none; font-weight:800; font-size:.86rem; letter-spacing:.01em;}
+  nav a:hover{color:var(--blue);}
+  .nav-toggle{display:none; background:none; border:none; font-size:1.6rem; cursor:pointer; color:var(--navy);}
+
+  @media(max-width:900px){
+    nav ul{
+      position:fixed; top:66px; right:0; height:calc(100% - 66px); width:230px;
+      background:var(--paper); flex-direction:column; padding:28px 24px; gap:20px;
+      transform:translateX(100%); transition:transform .3s ease; box-shadow:var(--shadow);
+    }
+    nav ul.open{transform:translateX(0);}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:90px 6vw 130px;
+    background:var(--navy);
+    color:var(--paper);
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+  }
+  .hero-content{position:relative; z-index:2; max-width:760px; margin:0 auto;}
+  .eyebrow{
+    display:inline-block; font-family:'Space Mono'; font-weight:700;
+    font-size:.8rem; color:var(--sun);
+    background:rgba(255,201,60,0.1); border:1px solid rgba(255,201,60,0.4);
+    padding:6px 16px; border-radius:6px; margin-bottom:22px;
+  }
+  .hero h1{font-size:clamp(2.3rem, 6vw, 4rem); line-height:1.08;}
+  .hero h1 .accent{color:var(--sun);}
+  .hero p.sub{margin-top:18px; font-size:1.1rem; font-weight:700; opacity:.9;}
+  .hero-dates{margin-top:10px; font-family:'Space Mono'; font-weight:400; font-size:.9rem; opacity:.75;}
+
+  .hero-photo{
+    margin:44px auto 0; max-width:640px; aspect-ratio:16/9;
+    border-radius:14px; border:1px solid rgba(255,255,255,0.15);
+    box-shadow:var(--shadow);
+    position:relative; z-index:2;
+  }
+
+  /* ---------- PLACEHOLDER PHOTO SLOTS ---------- */
+  .photo-slot{
+    background:
+      repeating-linear-gradient(45deg, rgba(29,43,83,0.06) 0 10px, rgba(29,43,83,0.02) 10px 20px),
+      var(--paper);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    color:var(--navy); text-align:center; padding:14px;
+    width:100%; height:100%;
+  }
+  .photo-slot .icon{font-size:1.6rem;}
+  .photo-slot .label{font-weight:800; font-size:.76rem; opacity:.6;}
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:80px 6vw;}
+  .section-head{max-width:640px; margin:0 auto 42px; text-align:center;}
+  .section-head .eyebrow-alt{
+    display:inline-block; font-family:'Space Mono'; font-weight:700; letter-spacing:.02em;
+    font-size:.78rem; margin-bottom:12px;
+  }
+  .section-head h2{font-size:clamp(1.7rem, 4vw, 2.4rem); color:var(--navy);}
+  .section-head p{margin-top:14px; font-size:1.02rem; line-height:1.6; color:#3a4470;}
+
+  /* ---------- RESUMEN ---------- */
+  .recap{background:var(--paper);}
+  .recap-grid{
+    max-width:960px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  }
+  .stat-card{
+    background:var(--cream); border-radius:14px; padding:26px 18px; text-align:center;
+    border:2px solid rgba(29,43,83,0.08);
+  }
+  .stat-card .num{font-family:'Space Mono'; font-weight:700; font-size:2.2rem; color:var(--blue);}
+  .stat-card .lbl{font-weight:700; margin-top:6px; font-size:.9rem; color:var(--navy);}
+  @media(max-width:720px){.recap-grid{grid-template-columns:1fr;}}
+
+  /* ---------- QUICK NAV BLOCKS (signature element) ---------- */
+  .blocks-nav{background:var(--cream);}
+  .block-rail{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:18px; max-width:1000px; margin:0 auto;
+  }
+  .quick-block{
+    position:relative;
+    padding:16px 22px 16px 30px;
+    border-radius:0 10px 10px 10px;
+    color:var(--paper); font-weight:800; font-size:.92rem;
+    text-decoration:none;
+    box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:10px;
+    transition:transform .18s ease;
+  }
+  .quick-block:hover{transform:translateY(-3px);}
+  .quick-block::before{
+    content:"";
+    position:absolute; top:-9px; left:16px; width:20px; height:12px;
+    background:inherit; border-radius:6px 6px 0 0;
+  }
+  .quick-block .n{font-family:'Space Mono'; opacity:.75; font-size:.8rem;}
+
+  /* ---------- GALLERY SECTIONS ---------- */
+  .gallery-section{padding:70px 6vw;}
+  .gallery-section .block-title{
+    position:relative;
+    display:inline-flex; align-items:center; gap:10px;
+    padding:12px 24px 12px 24px;
+    border-radius:0 10px 10px 10px;
+    color:var(--paper); font-family:'Fredoka'; font-weight:600; font-size:1.3rem;
+    margin-bottom:8px;
+  }
+  .gallery-section .block-title::before{
+    content:"";
+    position:absolute; top:-10px; left:18px; width:22px; height:13px;
+    background:inherit; border-radius:6px 6px 0 0;
+  }
+  .gallery-section .block-title .num{font-family:'Space Mono'; font-size:.85rem; opacity:.8;}
+  .gallery-section .desc{max-width:600px; margin:16px 0 32px; color:#3a4470; line-height:1.6;}
+
+  .photo-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;
+  }
+  @media(max-width:900px){.photo-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.photo-grid{grid-template-columns:1fr;}}
+  .photo-grid .cell{
+    aspect-ratio:4/3; border-radius:10px; overflow:hidden;
+    box-shadow:var(--shadow); cursor:pointer;
+    border:3px solid var(--paper);
+    transition:transform .18s ease;
+  }
+  .photo-grid .cell:hover{transform:scale(1.03);}
+
+  .sec-1{background:var(--teal);}
+  .sec-2{background:var(--coral);}
+  .sec-3{background:var(--blue);}
+  .sec-4{background:var(--purple);}
+  .sec-5{background:var(--grass);}
+  .bg-1{background:#EFFAF8;}
+  .bg-2{background:#FFF3F1;}
+  .bg-3{background:#EFF5FF;}
+  .bg-4{background:#F5F2FF;}
+  .bg-5{background:#F0FBF4;}
+
+  /* ---------- CIERRE ---------- */
+  .closing{
+    background:var(--navy);
+    color:var(--paper); text-align:center;
+  }
+  .closing h2{font-size:clamp(1.8rem,4.5vw,2.6rem);}
+  .closing p{max-width:560px; margin:16px auto 30px; font-size:1.02rem; line-height:1.6; opacity:.85;}
+  .btn{
+    display:inline-block; background:var(--sun); color:var(--navy); font-weight:800;
+    padding:14px 32px; border-radius:8px; text-decoration:none; box-shadow:var(--shadow);
+    font-family:'Space Mono';
+  }
+  .next-date{margin-top:26px; font-family:'Space Mono'; font-size:.88rem; opacity:.75;}
+
+  footer{
+    background:#0F1226; color:#8a90b8; text-align:center; padding:26px; font-size:.82rem; font-family:'Space Mono';
+  }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(22,26,46,0.88); display:none;
+    align-items:center; justify-content:center; z-index:200; padding:30px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-inner{max-width:600px; width:100%; background:var(--paper); border-radius:12px; padding:20px; text-align:center;}
+  .lightbox .photo-slot{aspect-ratio:4/3; border-radius:8px;}
+  .lightbox-close{margin-top:16px; background:var(--coral); color:white; border:none; padding:10px 22px; border-radius:8px; font-weight:800; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><span class="brand-badge">&lt;/&gt;</span> Camp CS · Sagrado 2026</div>
+  <button class="nav-toggle" id="navToggle">☰</button>
+  <ul id="navMenu">
+    <li><a href="#resumen">Resumen</a></li>
+    <li><a href="#sec1">Sagrado</a></li>
+    <li><a href="#sec2">Visitas</a></li>
+    <li><a href="#sec3">Programación</a></li>
+    <li><a href="#sec4">App Inventor</a></li>
+    <li><a href="#sec5">The Team</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-content">
+    <span class="eyebrow mono">// campamento_de_computacion.run()</span>
+    <h1>De estudiantes de <span class="accent">último año</span> a futuros programadores</h1>
+    <p class="sub">Así vivimos el Campamento de Computación en Sagrado</p>
+    <p class="hero-dates mono">[fecha inicio] – [fecha cierre] · Universidad del Sagrado Corazón</p>
+  </div>
+  <div class="hero-photo photo-slot">
+    <span class="icon">📸</span>
+    <span class="label">FOTO GRUPAL — reemplaza este bloque con tu imagen principal</span>
+  </div>
+</header>
+
+<section class="recap" id="resumen">
+  <div class="section-head">
+    <span class="eyebrow-alt" style="color:var(--blue);">El resumen</span>
+    <h2>Una semana de código, retos y equipo</h2>
+    <p>[Escribe aquí 2-3 líneas contando cómo estuvo el campamento: el ambiente, lo que más disfrutaron los estudiantes de duodécimo grado, y algún momento especial para las familias.]</p>
+  </div>
+  <div class="recap-grid">
+    <div class="stat-card">
+      <div class="num">[N]</div>
+      <div class="lbl">Estudiantes</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">[N]</div>
+      <div class="lbl">Días de campamento</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">[N]</div>
+      <div class="lbl">Apps creadas</div>
+    </div>
+  </div>
+</section>
+
+<section class="blocks-nav">
+  <div class="section-head">
+    <span class="eyebrow-alt" style="color:var(--coral);">Explora por sección</span>
+    <h2>Cinco capítulos de la semana</h2>
+  </div>
+  <div class="block-rail">
+    <a href="#sec1" class="quick-block" style="background:var(--teal);"><span class="n">01</span> Aprendiendo en Sagrado</a>
+    <a href="#sec2" class="quick-block" style="background:var(--coral);"><span class="n">02</span> Visitas y experiencias pre-profesionales</a>
+    <a href="#sec3" class="quick-block" style="background:var(--blue);"><span class="n">03</span> Programación e innovación tecnológica</a>
+    <a href="#sec4" class="quick-block" style="background:var(--purple);"><span class="n">04</span> Proyecto MIT App Inventor</a>
+    <a href="#sec5" class="quick-block" style="background:var(--grass);"><span class="n">05</span> The Team</a>
+  </div>
+</section>
+
+<!-- SECCIÓN 1 -->
+<section class="gallery-section bg-1" id="sec1">
+  <span class="block-title sec-1"><span class="num">01</span> Aprendiendo en Sagrado</span>
+  <p class="desc">[Breve descripción: cómo fueron las clases y talleres en el campus de Sagrado, qué aprendieron los estudiantes estos días.]</p>
+  <div class="photo-grid" data-count="6" data-section="Aprendiendo en Sagrado"></div>
+</section>
+
+<!-- SECCIÓN 2 -->
+<section class="gallery-section bg-2" id="sec2">
+  <span class="block-title sec-2"><span class="num">02</span> Visitas y experiencias pre-profesionales</span>
+  <p class="desc">[Breve descripción: a qué empresas o lugares visitaron, con quién hablaron, qué aprendieron sobre el mundo profesional de la tecnología.]</p>
+  <div class="photo-grid" data-count="6" data-section="Visitas y experiencias pre-profesionales"></div>
+</section>
+
+<!-- SECCIÓN 3 -->
+<section class="gallery-section bg-3" id="sec3">
+  <span class="block-title sec-3"><span class="num">03</span> Programación e innovación tecnológica</span>
+  <p class="desc">[Breve descripción: qué lenguajes, herramientas o retos de programación trabajaron, proyectos de innovación destacados.]</p>
+  <div class="photo-grid" data-count="6" data-section="Programación e innovación tecnológica"></div>
+</section>
+
+<!-- SECCIÓN 4 -->
+<section class="gallery-section bg-4" id="sec4">
+  <span class="block-title sec-4"><span class="num">04</span> Proyecto MIT App Inventor</span>
+  <p class="desc">[Breve descripción: qué apps crearon los estudiantes con MIT App Inventor, algún proyecto destacado o momento de la presentación final.]</p>
+  <div class="photo-grid" data-count="6" data-section="Proyecto MIT App Inventor"></div>
+</section>
+
+<!-- SECCIÓN 5 -->
+<section class="gallery-section bg-5" id="sec5">
+  <span class="block-title sec-5"><span class="num">05</span> The Team</span>
+  <p class="desc">[Breve descripción: quiénes fueron los facilitadores, mentores y equipo detrás del campamento.]</p>
+  <div class="photo-grid" data-count="6" data-section="The Team"></div>
+</section>
+
+<section class="closing" id="cierre">
+  <h2>¡Gracias por ser parte de este verano de código!</h2>
+  <p>[Mensaje de cierre para las familias: agradecimiento, cómo pueden pedir más fotos, o cómo mantenerse en contacto para el próximo campamento.]</p>
+  <a class="btn" href="mailto:tuemail@ejemplo.com">contact.us()</a>
+  <p class="next-date">📅 Próximo campamento: [fecha tentativa 2027]</p>
+</section>
+
+<footer>
+  &lt;/&gt; Hecho para las familias del Campamento de Computación — Sagrado 2026
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <div class="photo-slot" id="lightboxPhoto"><span class="icon">📸</span><span class="label" id="lightboxLabel"></span></div>
+    <button class="lightbox-close" id="lightboxClose">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  // Menú móvil
+  const navToggle = document.getElementById('navToggle');
+  const navMenu = document.getElementById('navMenu');
+  navToggle.addEventListener('click', () => navMenu.classList.toggle('open'));
+  navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navMenu.classList.remove('open')));
+
+  // Generar los espacios de fotos por sección (mínimo 5, usamos 6 por grid parejo)
+  document.querySelectorAll('.photo-grid').forEach(grid => {
+    const count = parseInt(grid.dataset.count, 10);
+    const sectionName = grid.dataset.section;
+    for(let i = 1; i <= count; i++){
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.innerHTML = `<div class="photo-slot"><span class="icon">📷</span><span class="label">Foto ${i}</span></div>`;
+      cell.addEventListener('click', () => openLightbox(sectionName, i));
+      grid.appendChild(cell);
+    }
+  });
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxLabel = document.getElementById('lightboxLabel');
+  function openLightbox(sectionName, n){
+    lightboxLabel.textContent = `${sectionName} — Foto ${n}`;
+    lightbox.classList.add('open');
+  }
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
